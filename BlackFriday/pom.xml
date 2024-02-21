@@ -33,6 +33,12 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.4.4.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>de.mkammerer</groupId>
+            <artifactId>argon2-jvm-nolibs</artifactId>
+            <version>2.11</version>
+        </dependency>
     </dependencies>
 
 </project>
