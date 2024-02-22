@@ -18,6 +18,6 @@ import lombok.Setter;
 public class User extends EntityBase {
     @Column(nullable = false, unique = true)
     private String username;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 }

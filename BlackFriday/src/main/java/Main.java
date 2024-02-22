@@ -1,7 +1,4 @@
-import data.model.entity.User;
-import data.repository.IUserRepository;
 import data.repository.UserRepository;
-import data.util.SessionFactoryProvider;
 
 public class Main {
     public static void main(String[] args) {
@@ -30,9 +27,7 @@ public class Main {
 //        {
 //            System.out.printf("Hibernate threw an exception: %s", ex.getMessage());
 //        }
-        IUserRepository userRepository = new UserRepository();
-        User testUser = new User("test", "test");
-        userRepository.create(testUser);
-        SessionFactoryProvider.getSessionFactory().close();
+        UserRepository userRepository = new UserRepository();
+        System.out.println(userRepository.getAll().size());
     }
 }
