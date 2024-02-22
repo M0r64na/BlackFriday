@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface IRepository<T extends EntityBase> {
     @Transactional
-    T create(T entity) throws HibernateException;
+    void create(T entity) throws HibernateException;
     @Transactional
     T update(T entity) throws HibernateException;
     Optional<T> getById(UUID id) throws HibernateException;

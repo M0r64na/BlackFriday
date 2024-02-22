@@ -16,7 +16,7 @@ import java.util.UUID;
 
 // Generic base class for common data access operations
 public abstract class RepositoryBase<T extends EntityBase> implements IRepository<T> {
-    private static final SessionFactory sessionFactory = SessionFactoryProvider.getSessionFactory();
+    protected static final SessionFactory sessionFactory = SessionFactoryProvider.getSessionFactory();
     private final Class<T> clazz;
 
     @SuppressWarnings("unchecked")
@@ -25,7 +25,7 @@ public abstract class RepositoryBase<T extends EntityBase> implements IRepositor
     }
 
     @Override
-    public T create(T entity) throws HibernateException {
+    public void create(T entity) throws HibernateException {
         Session newSession = sessionFactory.openSession();
 
         newSession.beginTransaction();
@@ -33,8 +33,6 @@ public abstract class RepositoryBase<T extends EntityBase> implements IRepositor
         newSession.getTransaction().commit();
 
         newSession.close();
-
-        return entity;
     }
 
     @Override
@@ -42,12 +40,12 @@ public abstract class RepositoryBase<T extends EntityBase> implements IRepositor
         Session newSession = sessionFactory.openSession();
 
         newSession.beginTransaction();
-        newSession.merge(entity);
+        T updated = newSession.merge(entity);
         newSession.getTransaction().commit();
 
         newSession.close();
 
-        return entity;
+        return updated;
     }
 
     @Override

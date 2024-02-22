@@ -36,7 +36,7 @@
 
         <dependency>
             <groupId>de.mkammerer</groupId>
-            <artifactId>argon2-jvm-nolibs</artifactId>
+            <artifactId>argon2-jvm</artifactId>
             <version>2.11</version>
         </dependency>
     </dependencies>

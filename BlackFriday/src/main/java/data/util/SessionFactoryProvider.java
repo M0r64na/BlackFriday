@@ -2,7 +2,6 @@ package data.util;
 
 import data.model.entity.User;
 import lombok.Getter;
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;

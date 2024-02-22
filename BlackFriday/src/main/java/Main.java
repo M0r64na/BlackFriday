@@ -1,3 +1,4 @@
+import data.model.entity.User;
 import data.repository.UserRepository;
 
 public class Main {
@@ -28,6 +29,8 @@ public class Main {
 //            System.out.printf("Hibernate threw an exception: %s", ex.getMessage());
 //        }
         UserRepository userRepository = new UserRepository();
-        System.out.println(userRepository.getAll().size());
+        User newUser = userRepository.getAll().get(0);
+        newUser.setUsername("TEST");
+        userRepository.update(newUser);
     }
 }
