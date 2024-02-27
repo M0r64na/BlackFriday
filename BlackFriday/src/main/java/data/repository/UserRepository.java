@@ -41,6 +41,19 @@ public class UserRepository extends RepositoryBase<User> {
         return updated;
     }
 
+    public User getByUsername(String username) {
+        Session newSession = sessionFactory.openSession();
+
+        User res = newSession
+                .createQuery("FROM User u WHERE u.username =: username", User.class)
+                .setParameter("username", username)
+                .uniqueResult();
+
+        newSession.close();
+
+        return res;
+    }
+
     private void updatePassword(User user) {
         String encodedPassword = this.getById(user.getId()).orElseThrow().getPassword();
 

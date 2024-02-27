@@ -12,4 +12,5 @@ public interface IUserService {
     Optional<User> getById(UUID id);
     List<User> getAll();
     void deleteById(UUID id);
+    User getByUsername(String username);
 }
