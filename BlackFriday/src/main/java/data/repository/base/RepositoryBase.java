@@ -8,7 +8,6 @@ import jakarta.persistence.criteria.Root;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;

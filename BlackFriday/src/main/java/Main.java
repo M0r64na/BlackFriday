@@ -3,7 +3,6 @@ import application.service.UserService;
 import common.LoginService;
 import common.config.LoginConfiguration;
 import data.model.entity.User;
-
 import javax.security.auth.Subject;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginException;

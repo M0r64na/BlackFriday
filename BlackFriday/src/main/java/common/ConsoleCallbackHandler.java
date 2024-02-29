@@ -12,12 +12,10 @@ public class ConsoleCallbackHandler implements CallbackHandler {
          for(Callback c : callbacks) {
             // nameCallback and passwordCallback are pattern variables
             if(c instanceof NameCallback nameCallback) {
-                // nameCallback.setName(console.readLine(nameCallback.getPrompt()));
                 this.handleNameCallback(nameCallback);
                 continue;
             }
             else if(c instanceof PasswordCallback passwordCallback) {
-                // passwordCallback.setPassword(console.readPassword(passwordCallback.getPrompt()));
                 this.handlePasswordCallback(passwordCallback);
                 continue;
             }

@@ -1,8 +1,6 @@
 package common.config;
 
-import com.sun.security.auth.module.NTLoginModule;
 import common.module.UserLoginModule;
-
 import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.Configuration;
 import java.util.HashMap;

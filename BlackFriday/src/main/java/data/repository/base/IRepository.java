@@ -3,7 +3,6 @@ package data.repository.base;
 import data.model.entity.base.EntityBase;
 import jakarta.transaction.Transactional;
 import org.hibernate.HibernateException;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
