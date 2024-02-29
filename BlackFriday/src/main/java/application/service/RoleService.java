@@ -3,7 +3,6 @@ package application.service;
 import data.model.entity.Role;
 import data.model.entity.RoleName;
 import data.repository.RoleRepository;
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
