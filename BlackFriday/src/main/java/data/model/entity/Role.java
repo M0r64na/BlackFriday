@@ -16,5 +16,5 @@ import lombok.Setter;
 public class Role extends EntityBase {
     @Column(unique = true, nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private RoleName name;
+    private RoleName roleName;
 }

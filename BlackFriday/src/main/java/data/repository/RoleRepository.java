@@ -14,7 +14,7 @@ public class RoleRepository extends RepositoryBase<Role> {
         Session newSession = sessionFactory.openSession();
 
         Role res = newSession
-                .createQuery("FROM Role r WHERE r.name =: name", Role.class)
+                .createQuery("FROM Role r WHERE r.roleName =: name", Role.class)
                 .setParameter("name", name)
                 .uniqueResult();
 

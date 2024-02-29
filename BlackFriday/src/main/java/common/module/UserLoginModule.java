@@ -3,6 +3,7 @@ package common.module;
 import application.service.IUserService;
 import application.service.UserService;
 import com.sun.security.auth.UserPrincipal;
+import common.RolePrincipal;
 import data.model.entity.User;
 import application.util.PasswordEncoder;
 import javax.security.auth.Subject;
@@ -12,14 +13,14 @@ import javax.security.auth.spi.LoginModule;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Map;
+import java.util.Set;
 
 public class UserLoginModule implements LoginModule {
     private static final IUserService userService = new UserService();
 
     private Subject subject;
     private CallbackHandler callbackHandler;
-    private String username;
-    private Principal principal;
+    private User user;
     private boolean isLoginSuccessful = false;
 
     @Override
@@ -36,10 +37,10 @@ public class UserLoginModule implements LoginModule {
 
         try {
             this.callbackHandler.handle(callbacks);
-            this.username = nameCallback.getName();
+            String username = nameCallback.getName();
             String password = new String(passwordCallback.getPassword());
 
-            User user = userService.getByUsername(this.username);
+            this.user = userService.getByUsername(username);
             if(PasswordEncoder.verifyPasswords(user.getPassword(), password)) this.isLoginSuccessful = true;
 
             passwordCallback.clearPassword();
@@ -56,8 +57,12 @@ public class UserLoginModule implements LoginModule {
     public boolean commit() throws LoginException {
         if(!this.isLoginSuccessful) return false;
 
-        this.principal = new UserPrincipal(this.username);
-        subject.getPrincipals().add(this.principal);
+        Principal principal = new UserPrincipal(this.user.getUsername());
+        this.subject.getPrincipals().add(principal);
+        this.user.getRoles().forEach(r -> {
+            RolePrincipal currRolePrincipal = new RolePrincipal(r);
+            this.subject.getPrincipals().add(currRolePrincipal);
+        });
 
         return true;
     }
@@ -69,6 +74,14 @@ public class UserLoginModule implements LoginModule {
 
     @Override
     public boolean logout() throws LoginException {
-        return this.subject.getPrincipals().remove(this.principal);
+        boolean isLogoutSuccessful = true;
+        Set<Principal> principals = this.subject.getPrincipals();
+
+        for(Principal principal : principals) {
+            boolean currRes = principals.remove(principal);
+            if(!currRes) isLogoutSuccessful = false;
+        }
+
+        return isLogoutSuccessful;
     }
 }

@@ -2,7 +2,7 @@ import application.service.IRoleService;
 import application.service.IUserService;
 import application.service.RoleService;
 import application.service.UserService;
-import common.LoginService;
+import common.UserLoginService;
 import common.config.LoginConfiguration;
 import data.model.entity.User;
 import javax.security.auth.Subject;
@@ -22,8 +22,8 @@ public class Main {
 
         Configuration.setConfiguration(new LoginConfiguration());
 
-        LoginService loginService = new LoginService();
-        Subject subject = loginService.login();
+        UserLoginService userLoginService = new UserLoginService();
+        Subject subject = userLoginService.login();
 
         System.out.println(subject.getPrincipals().iterator().next() + " successfully logged in");
     }
