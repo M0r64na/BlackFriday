@@ -4,7 +4,7 @@ import application.service.IUserService;
 import application.service.UserService;
 import com.sun.security.auth.UserPrincipal;
 import data.model.entity.User;
-import data.util.PasswordEncoder;
+import application.util.PasswordEncoder;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
 import javax.security.auth.login.LoginException;

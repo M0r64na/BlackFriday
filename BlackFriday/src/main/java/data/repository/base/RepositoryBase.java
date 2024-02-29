@@ -1,7 +1,7 @@
 package data.repository.base;
 
 import data.model.entity.base.EntityBase;
-import data.util.SessionFactoryProvider;
+import data.repository.util.SessionFactoryProvider;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;

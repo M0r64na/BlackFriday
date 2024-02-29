@@ -1,4 +1,4 @@
-package data.util;
+package data.repository.util;
 
 import data.model.entity.Role;
 import data.model.entity.User;

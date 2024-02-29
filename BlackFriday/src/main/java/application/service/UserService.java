@@ -4,7 +4,7 @@ import data.model.entity.Role;
 import data.model.entity.RoleName;
 import data.model.entity.User;
 import data.repository.UserRepository;
-import data.util.PasswordEncoder;
+import application.util.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
