@@ -1,17 +1,24 @@
 package application.service;
 
+import data.model.entity.Role;
+import data.model.entity.RoleName;
 import data.model.entity.User;
 import data.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 // TODO map dto-s to entities => MAPSTRUCT
 public class UserService implements IUserService {
     private static final UserRepository userRepository = new UserRepository();
+    private static final IRoleService roleService = new RoleService();
 
     @Override
     public void create(User user) {
+        Role clientRole = roleService.findByName(RoleName.CLIENT);
+        user.getRoles().add(clientRole);
+
         userRepository.create(user);
     }
 
