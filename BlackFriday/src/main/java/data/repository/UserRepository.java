@@ -2,13 +2,15 @@ package data.repository;
 
 import data.model.entity.User;
 import data.repository.base.RepositoryBase;
+import data.repository.interfaces.IUserRepository;
 import org.hibernate.Session;
 
-public class UserRepository extends RepositoryBase<User> {
+public class UserRepository extends RepositoryBase<User> implements IUserRepository {
     public UserRepository() {
         super();
     }
 
+    @Override
     public User getByUsername(String username) {
         Session newSession = sessionFactory.openSession();
 

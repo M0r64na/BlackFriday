@@ -9,9 +9,11 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-public class SessionFactoryProvider {
+public final class SessionFactoryProvider {
     @Getter
     private static final SessionFactory sessionFactory = buildSessionFactory();
+
+    private SessionFactoryProvider() {}
 
     private static SessionFactory buildSessionFactory()
     {

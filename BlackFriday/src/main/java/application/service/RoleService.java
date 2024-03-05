@@ -1,7 +1,8 @@
 package application.service;
 
+import application.service.interfaces.IRoleService;
 import data.model.entity.Role;
-import data.model.entity.RoleName;
+import data.model.entity.enums.RoleName;
 import data.repository.RoleRepository;
 import java.util.List;
 import java.util.Optional;

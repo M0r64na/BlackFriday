@@ -1,6 +1,7 @@
 package data.model.entity;
 
 import data.model.entity.base.EntityBase;
+import data.model.entity.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

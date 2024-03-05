@@ -1,7 +1,7 @@
 package common.module;
 
-import application.service.IUserService;
 import application.service.UserService;
+import application.service.interfaces.IUserService;
 import com.sun.security.auth.UserPrincipal;
 import common.RolePrincipal;
 import data.model.entity.User;

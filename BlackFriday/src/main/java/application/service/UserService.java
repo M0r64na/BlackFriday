@@ -1,11 +1,13 @@
 package application.service;
 
+import application.service.interfaces.IRoleService;
+import application.service.interfaces.IUserService;
 import data.model.entity.Role;
-import data.model.entity.RoleName;
+import data.model.entity.enums.RoleName;
 import data.model.entity.User;
 import data.repository.UserRepository;
 import application.util.PasswordEncoder;
-
+import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

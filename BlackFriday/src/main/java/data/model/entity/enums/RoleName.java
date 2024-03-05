@@ -1,4 +1,4 @@
-package data.model.entity;
+package data.model.entity.enums;
 
 public enum RoleName {
     CLIENT, EMPLOYEE
