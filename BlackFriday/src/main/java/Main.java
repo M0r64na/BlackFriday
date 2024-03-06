@@ -24,7 +24,6 @@ public class Main {
     * Docker DB script
     * prettify the console output
     *
-    * !!! refactor service methods parameters
     * !!! move util package (SessionFactorProvide) to data package
     * !!! remove getById and getAll methods from RoleService
     * !!! change create method return type in services

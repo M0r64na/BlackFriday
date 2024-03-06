@@ -1,4 +1,4 @@
-package data.repository.util;
+package data.util;
 
 import data.model.entity.*;
 import lombok.Getter;
