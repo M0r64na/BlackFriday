@@ -1,7 +1,6 @@
 package data.repository.util;
 
-import data.model.entity.Role;
-import data.model.entity.User;
+import data.model.entity.*;
 import lombok.Getter;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -24,7 +23,11 @@ public final class SessionFactoryProvider {
         MetadataSources metadataSources = new MetadataSources(serviceRegistry);
         metadataSources
                 .addAnnotatedClass(Role.class)
-                .addAnnotatedClass(User.class);
+                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Product.class)
+                .addAnnotatedClass(Status.class)
+                .addAnnotatedClass(Order.class)
+                .addAnnotatedClass(OrderItem.class);
 
         Metadata metadata = metadataSources.buildMetadata();
 
