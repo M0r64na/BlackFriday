@@ -7,10 +7,6 @@ import data.repository.interfaces.IRoleRepository;
 import org.hibernate.Session;
 
 public class RoleRepository extends RepositoryBase<Role> implements IRoleRepository {
-    public RoleRepository() {
-        super();
-    }
-
     @Override
     public Role findByName(RoleName name) {
         Session newSession = sessionFactory.openSession();

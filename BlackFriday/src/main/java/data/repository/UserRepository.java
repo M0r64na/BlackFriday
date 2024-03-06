@@ -6,10 +6,6 @@ import data.repository.interfaces.IUserRepository;
 import org.hibernate.Session;
 
 public class UserRepository extends RepositoryBase<User> implements IUserRepository {
-    public UserRepository() {
-        super();
-    }
-
     @Override
     public User getByUsername(String username) {
         Session newSession = sessionFactory.openSession();

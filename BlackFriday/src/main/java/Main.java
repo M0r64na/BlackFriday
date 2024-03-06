@@ -24,9 +24,6 @@ public class Main {
     * Docker DB script
     * prettify the console output
     *
-    * !!! remove getById and getAll methods from RoleService
-    * !!! change create method return type in services
-    * !!! change service create + update methods to accept the needed info and internally create the entity
     * !!! remove constructors in repos
      */
     private static final IUserService userService = new UserService();
