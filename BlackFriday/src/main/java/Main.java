@@ -42,8 +42,7 @@ public class Main {
         roleService.initialize();
         statusService.initialize();
 
-        User user = new User("kiki", "mojesh");
-        userService.create(user);
+        userService.create("kiki", "mojesh");
 
         Configuration.setConfiguration(new UserLoginConfiguration());
 

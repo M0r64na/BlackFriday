@@ -18,18 +18,18 @@ public class UserService implements IUserService {
     private static final IRoleService roleService = new RoleService();
 
     @Override
-    public void create(User user) {
-        String encodedPassword = PasswordEncoder.encodePassword(user.getPassword());
-        user.setPassword(encodedPassword);
-
+    public void create(String username, String password) {
+        String encodedPassword = PasswordEncoder.encodePassword(password);
         Role clientRole = roleService.findByName(RoleName.CLIENT);
+        User user = new User(username, encodedPassword);
         user.getRoles().add(clientRole);
 
         userRepository.create(user);
     }
 
     @Override
-    public User update(User user) {
+    public User update(String username, String password) {
+        User user = this.getByUsername(username);
         this.updatePassword(user);
 
         return userRepository.update(user);
