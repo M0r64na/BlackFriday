@@ -20,8 +20,7 @@ public class ProductService implements IProductService {
                        int numberInStock, double minPrice, double currPrice,
                        String usernameCreatedBy) {
         Product product = new Product(name, description, numberInStock,
-                BigDecimal.valueOf(minPrice), BigDecimal.valueOf(currPrice),
-                false);
+                BigDecimal.valueOf(minPrice), BigDecimal.valueOf(currPrice));
 
         User createdAndLastModifiedBy = userService.getByUsername(usernameCreatedBy);
         product.setCreatedBy(createdAndLastModifiedBy);
@@ -33,7 +32,6 @@ public class ProductService implements IProductService {
     @Override
     public Product update(String name, String description,
                           int numberInStock, double minPrice, double currPrice,
-                          boolean isPartFromBlackFridayCampaign,
                           String usernameLastModifiedBy) {
         Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
         product.setName(name);
@@ -41,7 +39,6 @@ public class ProductService implements IProductService {
         product.setNumberInStock(numberInStock);
         product.setMinPrice(BigDecimal.valueOf(minPrice));
         product.setCurrPrice(BigDecimal.valueOf(currPrice));
-        product.setPartFromBlackFridayCampaign(isPartFromBlackFridayCampaign);
 
         return productRepository.update(product);
     }
@@ -92,22 +89,6 @@ public class ProductService implements IProductService {
         if(newNumberInStock < 0) throw new RuntimeException("Insufficient product quantity");
 
         product.setNumberInStock(newNumberInStock);
-
-        productRepository.update(product);
-    }
-
-    @Override
-    public void addToBlackFridayCampaign(String name, String usernameLastModifiedBy) {
-        Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
-        product.setPartFromBlackFridayCampaign(true);
-
-        productRepository.update(product);
-    }
-
-    @Override
-    public void removeToBlackFridayCampaign(String name, String usernameLastModifiedBy) {
-        Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
-        product.setPartFromBlackFridayCampaign(false);
 
         productRepository.update(product);
     }

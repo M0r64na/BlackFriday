@@ -29,9 +29,6 @@ public class Product extends EntityBase {
     @Column(name = "current_price", nullable = false)
     @NonNull
     private BigDecimal currPrice;
-    @Column(name = "is_part_from_black_friday_campaign", nullable = false)
-    @NonNull
-    private boolean isPartFromBlackFridayCampaign;
     @ManyToOne
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     private User createdBy;
