@@ -27,7 +27,10 @@ public final class SessionFactoryProvider {
                 .addAnnotatedClass(Product.class)
                 .addAnnotatedClass(Status.class)
                 .addAnnotatedClass(Order.class)
-                .addAnnotatedClass(OrderItem.class);
+                .addAnnotatedClass(OrderItem.class)
+                .addAnnotatedClass(Campaign.class)
+                .addAnnotatedClass(CampaignItem.class)
+                .addAnnotatedClass(CampaignStop.class);
 
         Metadata metadata = metadataSources.buildMetadata();
 

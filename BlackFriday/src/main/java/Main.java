@@ -14,7 +14,7 @@ import java.util.Map;
 public class Main {
     /*
     * TODO
-    * add Product entity + functionality
+    *  ??? BlackFriday campaign entity => start + end date, started + ended by; orders with dates and revenue to filter after that
     * add authorization using Subject, RolePrincipal + @ (incl validator / interceptor / aspect)
     * apply DTO pattern
     * apply DI using DI framework + @inject
@@ -23,14 +23,13 @@ public class Main {
     * client-server part => separate code
     * Docker DB script
     * prettify the console output
-    *
-    * !!! remove constructors in repos
      */
     private static final IUserService userService = new UserService();
     private static final IRoleService roleService = new RoleService();
     private static final IStatusService statusService = new StatusService();
     private static final IProductService productService = new ProductService();
     private static final IOrderService orderService = new OrderService();
+    private static final ICampaignService campaignService = new CampaignService();
 
     public static void main(String[] args) throws LoginException, IOException {
         // TODO implement DI (dependency injection) to use @PostConstruct
@@ -50,12 +49,20 @@ public class Main {
         System.out.println(subject.getPrincipals().iterator().next() + " successfully logged in");
 
         productService.create("test product 1", "test descr", 50,
-                8, 9, "kiki");
+                8, 90, "kiki");
         productService.create("test product 2", "test descr", 50,
-                8, 9, "kiki");
+                8, 98, "kiki");
+
+        Map<String, Double> productNamesAndDiscountPercentages = new HashMap<>();
+        productNamesAndDiscountPercentages.put("test product 1", 12.5);
+        productNamesAndDiscountPercentages.put("test product 2", 15.0);
+        campaignService.startCampaign("kiki", productNamesAndDiscountPercentages);
+
         Map<String, Integer> productNamesAndQuantities = new HashMap<>();
         productNamesAndQuantities.put("test product 1", 12);
         productNamesAndQuantities.put("test product 2", 30);
         orderService.create("kiki", productNamesAndQuantities);
+
+        campaignService.stopCurrentCampaign("kiki");
     }
 }

@@ -67,20 +67,19 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void updateMinPrice(String name, double newMinPrice, String usernameLastModifiedBy) {
+    public void updateMinPrice(String name, BigDecimal newMinPrice, String usernameLastModifiedBy) {
         Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
-        product.setMinPrice(BigDecimal.valueOf(newMinPrice));
+        product.setMinPrice(newMinPrice);
 
         productRepository.update(product);
     }
 
     @Override
-    public void updateCurrPrice(String name, double newCurrPrice, String usernameLastModifiedBy) {
+    public void updateCurrPrice(String name, BigDecimal newCurrPrice, String usernameLastModifiedBy) {
         Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
-        BigDecimal newCurrPriceAsBigDecimal = BigDecimal.valueOf(newCurrPrice);
-        if(newCurrPriceAsBigDecimal.compareTo(product.getMinPrice()) < 0) throw new RuntimeException("Current price must be greater than or equal to minimum price");
+        if(newCurrPrice.compareTo(product.getMinPrice()) < 0) throw new RuntimeException("Current price must be greater than or equal to minimum price");
 
-        product.setCurrPrice(newCurrPriceAsBigDecimal);
+        product.setCurrPrice(newCurrPrice);
 
         productRepository.update(product);
     }

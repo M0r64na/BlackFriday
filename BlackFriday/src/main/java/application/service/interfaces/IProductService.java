@@ -1,6 +1,8 @@
 package application.service.interfaces;
 
 import data.model.entity.Product;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,8 +19,8 @@ public interface IProductService {
     List<Product> getAll();
     Product findByName(String name);
     void deleteById(UUID id);
-    void updateMinPrice(String name, double newMinPrice, String usernameLastModifiedBy);
-    void updateCurrPrice(String name, double newCurrPrice, String usernameLastModifiedBY);
+    void updateMinPrice(String name, BigDecimal newMinPrice, String usernameLastModifiedBy);
+    void updateCurrPrice(String name, BigDecimal newCurrPrice, String usernameLastModifiedBY);
     void reduceNumberInStock(String name, int quantity, String usernameLastModifiedBy);
     void addToBlackFridayCampaign(String name, String usernameLastModifiedBy);
     void removeToBlackFridayCampaign(String name, String usernameLastModifiedBy);
