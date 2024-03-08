@@ -7,7 +7,6 @@ import data.model.entity.enums.RoleName;
 import data.model.entity.User;
 import data.repository.UserRepository;
 import application.util.PasswordEncoder;
-import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,6 +52,18 @@ public class UserService implements IUserService {
     @Override
     public User getByUsername(String username) {
         return userRepository.getByUsername(username);
+    }
+
+    @Override
+    public void initialize() {
+        if(!userRepository.getAll().isEmpty()) return;
+
+        this.create("employee", "employee");
+
+        User employee = this.getByUsername("employee");
+        employee.getRoles().add(roleService.findByName(RoleName.EMPLOYEE));
+
+        userRepository.update(employee);
     }
 
     private void updatePassword(User user) {

@@ -1,20 +1,17 @@
 import application.service.*;
 import application.service.interfaces.*;
+import common.HasRoleEmployeeInterceptor;
 import common.RolePrincipal;
 import common.UserLoginService;
 import common.config.UserLoginConfiguration;
-import data.model.entity.User;
 import javax.security.auth.Subject;
 import javax.security.auth.login.Configuration;
-import javax.security.auth.login.LoginException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
     /*
     * TODO
-    *  ??? BlackFriday campaign entity => start + end date, started + ended by; orders with dates and revenue to filter after that
     * add authorization using Subject, RolePrincipal + @ (incl validator / interceptor / aspect)
     * apply DTO pattern
     * apply DI using DI framework + @inject
@@ -31,18 +28,19 @@ public class Main {
     private static final IOrderService orderService = new OrderService();
     private static final ICampaignService campaignService = new CampaignService();
 
-    public static void main(String[] args) throws LoginException, IOException {
+    public static void main(String[] args) throws Throwable {
         // TODO implement DI (dependency injection) to use @PostConstruct
         roleService.initialize();
+        userService.initialize();
         statusService.initialize();
 
         userService.create("kiki", "mojesh");
 
         Configuration.setConfiguration(new UserLoginConfiguration());
-
         UserLoginService userLoginService = new UserLoginService();
 
         Subject subject = userLoginService.login();
+
         subject.getPrincipals().forEach(p -> {
             if((p instanceof RolePrincipal)) System.out.println(p.getName());
         });
@@ -56,13 +54,21 @@ public class Main {
         Map<String, Double> productNamesAndDiscountPercentages = new HashMap<>();
         productNamesAndDiscountPercentages.put("test product 1", 12.5);
         productNamesAndDiscountPercentages.put("test product 2", 15.0);
-        campaignService.startCampaign("kiki", productNamesAndDiscountPercentages);
+
+        HasRoleEmployeeInterceptor interceptor = new HasRoleEmployeeInterceptor(campaignService);
+        // won't work => role CLIENT
+        // will work => role EMPLOYEE
+        interceptor.invoke(campaignService,
+                CampaignService.class.getMethod("startCampaign", String.class, Map.class),
+                new Object[] {subject.getPrincipals().iterator().next().getName(), productNamesAndDiscountPercentages});
 
         Map<String, Integer> productNamesAndQuantities = new HashMap<>();
         productNamesAndQuantities.put("test product 1", 12);
         productNamesAndQuantities.put("test product 2", 30);
         orderService.create("kiki", productNamesAndQuantities);
 
-        campaignService.stopCurrentCampaign("kiki");
+        interceptor.invoke(campaignService,
+                CampaignService.class.getMethod("stopCurrentCampaign", String.class),
+                new Object[] {subject.getPrincipals().iterator().next().getName()});
     }
 }

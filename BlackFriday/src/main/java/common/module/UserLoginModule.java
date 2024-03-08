@@ -4,6 +4,7 @@ import application.service.UserService;
 import application.service.interfaces.IUserService;
 import com.sun.security.auth.UserPrincipal;
 import common.RolePrincipal;
+import common.SecurityContext;
 import data.model.entity.User;
 import application.util.PasswordEncoder;
 import javax.security.auth.Subject;
@@ -17,7 +18,6 @@ import java.util.Set;
 
 public class UserLoginModule implements LoginModule {
     private static final IUserService userService = new UserService();
-
     private Subject subject;
     private CallbackHandler callbackHandler;
     private User user;
@@ -25,7 +25,8 @@ public class UserLoginModule implements LoginModule {
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
-        this.subject = subject;
+        SecurityContext.setSubject(subject);
+        this.subject = SecurityContext.getSubject();
         this.callbackHandler = callbackHandler;
     }
 
@@ -81,6 +82,7 @@ public class UserLoginModule implements LoginModule {
             boolean currRes = principals.remove(principal);
             if(!currRes) isLogoutSuccessful = false;
         }
+        SecurityContext.removeSubject();
 
         return isLogoutSuccessful;
     }
