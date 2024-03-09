@@ -78,10 +78,8 @@ public class UserLoginModule implements LoginModule {
         boolean isLogoutSuccessful = true;
         Set<Principal> principals = this.subject.getPrincipals();
 
-        for(Principal principal : principals) {
-            boolean currRes = principals.remove(principal);
-            if(!currRes) isLogoutSuccessful = false;
-        }
+        principals.removeIf(principal -> principal instanceof UserPrincipal || principal instanceof RolePrincipal);
+
         SecurityContext.removeSubject();
 
         return isLogoutSuccessful;

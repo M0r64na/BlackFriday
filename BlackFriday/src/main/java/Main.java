@@ -67,6 +67,8 @@ public class Main {
         productNamesAndQuantities.put("test product 2", 30);
         orderService.create("kiki", productNamesAndQuantities);
 
+        userLoginService.logout();
+
         interceptor.invoke(campaignService,
                 CampaignService.class.getMethod("stopCurrentCampaign", String.class),
                 new Object[] {subject.getPrincipals().iterator().next().getName()});
