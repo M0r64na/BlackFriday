@@ -34,43 +34,50 @@ public class Main {
         userService.initialize();
         statusService.initialize();
 
-        userService.create("kiki", "mojesh");
+        try {
+            userService.create("kiki", "mojesh");
 
-        Configuration.setConfiguration(new UserLoginConfiguration());
-        UserLoginService userLoginService = new UserLoginService();
+            Configuration.setConfiguration(new UserLoginConfiguration());
+            UserLoginService userLoginService = new UserLoginService();
 
-        Subject subject = userLoginService.login();
+            Subject subject = userLoginService.login();
 
-        subject.getPrincipals().forEach(p -> {
-            if((p instanceof RolePrincipal)) System.out.println(p.getName());
-        });
-        System.out.println(subject.getPrincipals().iterator().next() + " successfully logged in");
+            subject.getPrincipals().forEach(p -> {
+                if((p instanceof RolePrincipal)) System.out.println(p.getName());
+            });
+            System.out.println(subject.getPrincipals().iterator().next() + " successfully logged in");
 
-        productService.create("test product 1", "test descr", 50,
-                8, 90, "kiki");
-        productService.create("test product 2", "test descr", 50,
-                8, 98, "kiki");
+            productService.create("test product 1", "test descr", 50,
+                    8, 90, "kiki");
+            productService.create("test product 2", "test descr", 50,
+                    8, 98, "kiki");
 
-        Map<String, Double> productNamesAndDiscountPercentages = new HashMap<>();
-        productNamesAndDiscountPercentages.put("test product 1", 12.5);
-        productNamesAndDiscountPercentages.put("test product 2", 15.0);
+            Map<String, Double> productNamesAndDiscountPercentages = new HashMap<>();
+            productNamesAndDiscountPercentages.put("test product 1", 12.5);
+            productNamesAndDiscountPercentages.put("test product 2", 15.0);
 
-        HasRoleEmployeeInterceptor interceptor = new HasRoleEmployeeInterceptor(campaignService);
-        // won't work => role CLIENT
-        // will work => role EMPLOYEE
-        interceptor.invoke(campaignService,
-                CampaignService.class.getMethod("startCampaign", String.class, Map.class),
-                new Object[] {subject.getPrincipals().iterator().next().getName(), productNamesAndDiscountPercentages});
+            HasRoleEmployeeInterceptor interceptor = new HasRoleEmployeeInterceptor(campaignService);
+            // won't work => role CLIENT
+            // will work => role EMPLOYEE
 
-        Map<String, Integer> productNamesAndQuantities = new HashMap<>();
-        productNamesAndQuantities.put("test product 1", 12);
-        productNamesAndQuantities.put("test product 2", 30);
-        orderService.create("kiki", productNamesAndQuantities);
+            interceptor.invoke(campaignService,
+                    CampaignService.class.getMethod("startCampaign", String.class, Map.class),
+                    new Object[] {subject.getPrincipals().iterator().next().getName(), productNamesAndDiscountPercentages});
 
-        userLoginService.logout();
 
-        interceptor.invoke(campaignService,
-                CampaignService.class.getMethod("stopCurrentCampaign", String.class),
-                new Object[] {subject.getPrincipals().iterator().next().getName()});
+            Map<String, Integer> productNamesAndQuantities = new HashMap<>();
+            productNamesAndQuantities.put("test product 1", 12);
+            productNamesAndQuantities.put("test product 2", 30);
+            orderService.create("kiki", productNamesAndQuantities);
+
+            userLoginService.logout();
+
+            interceptor.invoke(campaignService,
+                    CampaignService.class.getMethod("stopCurrentCampaign", String.class),
+                    new Object[] {subject.getPrincipals().iterator().next().getName()});
+        }
+        catch (Exception ex) {
+            System.out.printf("Requested operation cannot be executed. Reason: %s", ex.getMessage()).println();
+        }
     }
 }
