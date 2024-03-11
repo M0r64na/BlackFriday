@@ -6,6 +6,9 @@ import data.repository.base.RepositoryBase;
 import data.repository.interfaces.IStatusRepository;
 import org.hibernate.Session;
 
+import javax.enterprise.inject.Default;
+
+@Default
 public class StatusRepository extends RepositoryBase<Status> implements IStatusRepository {
     @Override
     public Status findByOrderStatus(OrderStatus orderStatus) {

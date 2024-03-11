@@ -4,6 +4,11 @@ import common.HasRoleEmployeeInterceptor;
 import common.RolePrincipal;
 import common.UserLoginService;
 import common.config.UserLoginConfiguration;
+import common.module.UserLoginModule;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+
+import javax.inject.Inject;
 import javax.security.auth.Subject;
 import javax.security.auth.login.Configuration;
 import java.util.HashMap;
@@ -12,7 +17,6 @@ import java.util.Map;
 public class Main {
     /*
     * TODO
-    * add authorization using Subject, RolePrincipal + @ (incl validator / interceptor / aspect)
     * apply DTO pattern
     * apply DI using DI framework + @inject
     * @Singleton, @PostConstruct on role init
@@ -21,24 +25,26 @@ public class Main {
     * Docker DB script
     * prettify the console output
      */
-    private static final IUserService userService = new UserService();
-    private static final IRoleService roleService = new RoleService();
-    private static final IStatusService statusService = new StatusService();
-    private static final IProductService productService = new ProductService();
-    private static final IOrderService orderService = new OrderService();
-    private static final ICampaignService campaignService = new CampaignService();
 
     public static void main(String[] args) throws Throwable {
-        // TODO implement DI (dependency injection) to use @PostConstruct
-        roleService.initialize();
-        userService.initialize();
-        statusService.initialize();
+        Weld weld = new Weld();
 
-        try {
+        try(WeldContainer weldContainer = weld.initialize()) {
+            IUserService userService = weldContainer.select(IUserService.class).get();
+            IRoleService roleService = weldContainer.select(IRoleService.class).get();
+            IStatusService statusService = weldContainer.select(IStatusService.class).get();
+            IProductService productService = weldContainer.select(IProductService.class).get();
+            IOrderService orderService = weldContainer.select(IOrderService.class).get();
+            ICampaignService campaignService = weldContainer.select(ICampaignService.class).get();
+
+            roleService.initialize();
+            userService.initialize();
+            statusService.initialize();
+
             userService.create("kiki", "mojesh");
 
             Configuration.setConfiguration(new UserLoginConfiguration());
-            UserLoginService userLoginService = new UserLoginService();
+            UserLoginService userLoginService = weldContainer.select(UserLoginService.class).get();
 
             Subject subject = userLoginService.login();
 
@@ -70,7 +76,7 @@ public class Main {
             productNamesAndQuantities.put("test product 2", 30);
             orderService.create("kiki", productNamesAndQuantities);
 
-            userLoginService.logout();
+            // userLoginService.logout();
 
             interceptor.invoke(campaignService,
                     CampaignService.class.getMethod("stopCurrentCampaign", String.class),
@@ -79,5 +85,6 @@ public class Main {
         catch (Exception ex) {
             System.out.printf("Requested operation cannot be executed. Reason: %s", ex.getMessage()).println();
         }
+        // TODO implement DI (dependency injection) to use @PostConstruct
     }
 }

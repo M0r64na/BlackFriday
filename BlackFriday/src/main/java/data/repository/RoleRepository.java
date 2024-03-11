@@ -6,6 +6,9 @@ import data.repository.base.RepositoryBase;
 import data.repository.interfaces.IRoleRepository;
 import org.hibernate.Session;
 
+import javax.enterprise.inject.Default;
+
+@Default
 public class RoleRepository extends RepositoryBase<Role> implements IRoleRepository {
     @Override
     public Role findByName(RoleName name) {

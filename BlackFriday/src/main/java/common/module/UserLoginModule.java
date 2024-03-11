@@ -1,12 +1,14 @@
 package common.module;
 
-import application.service.UserService;
 import application.service.interfaces.IUserService;
 import com.sun.security.auth.UserPrincipal;
 import common.RolePrincipal;
 import common.SecurityContext;
 import data.model.entity.User;
 import application.util.PasswordEncoder;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
 import javax.security.auth.login.LoginException;
@@ -17,11 +19,15 @@ import java.util.Map;
 import java.util.Set;
 
 public class UserLoginModule implements LoginModule {
-    private static final IUserService userService = new UserService();
+    private static IUserService userService;
     private Subject subject;
     private CallbackHandler callbackHandler;
     private User user;
     private boolean isLoginSuccessful = false;
+
+    public static void setUserService(IUserService userService) {
+        UserLoginModule.userService = userService;
+    }
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {

@@ -5,6 +5,9 @@ import data.repository.base.RepositoryBase;
 import data.repository.interfaces.IUserRepository;
 import org.hibernate.Session;
 
+import javax.enterprise.inject.Default;
+
+@Default
 public class UserRepository extends RepositoryBase<User> implements IUserRepository {
     @Override
     public User getByUsername(String username) {

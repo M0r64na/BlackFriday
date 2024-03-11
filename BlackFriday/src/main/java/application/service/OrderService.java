@@ -5,16 +5,30 @@ import data.model.entity.*;
 import data.model.entity.enums.OrderStatus;
 import data.repository.OrderRepository;
 import data.repository.interfaces.IOrderRepository;
+
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 public class OrderService implements IOrderService {
-    private static final IOrderRepository orderRepository = new OrderRepository();
-    private static final IUserService userService = new UserService();
-    private static final IStatusService statusService = new StatusService();
-    private static final IProductService productService = new ProductService();
+//    private static final IOrderRepository orderRepository = new OrderRepository();
+//    private static final IUserService userService = new UserService();
+//    private static final IStatusService statusService = new StatusService();
+//    private static final IProductService productService = new ProductService();
+    private final IOrderRepository orderRepository;
+    private final IUserService userService;
+    private final IStatusService statusService;
+    private final IProductService productService;
+
+    @Inject
+    public OrderService(IOrderRepository orderRepository, IUserService userService, IStatusService statusService, IProductService productService) {
+        this.orderRepository = orderRepository;
+        this.userService = userService;
+        this.statusService = statusService;
+        this.productService = productService;
+    }
 
     @Override
     public void create(String username, Map<String, Integer> productNamesAndQuantities) {

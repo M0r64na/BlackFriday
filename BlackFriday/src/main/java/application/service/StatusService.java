@@ -6,8 +6,18 @@ import data.model.entity.enums.OrderStatus;
 import data.repository.StatusRepository;
 import data.repository.interfaces.IStatusRepository;
 
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
+
 public class StatusService implements IStatusService {
-    private static final IStatusRepository statusRepository = new StatusRepository();
+//    private static final IStatusRepository statusRepository = new StatusRepository();
+
+    private final IStatusRepository statusRepository;
+
+    @Inject
+    public StatusService(IStatusRepository statusRepository) {
+        this.statusRepository = statusRepository;
+    }
 
     @Override
     public Status findByName(OrderStatus orderStatus) {

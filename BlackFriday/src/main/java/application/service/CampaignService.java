@@ -11,6 +11,8 @@ import data.repository.CampaignRepository;
 import data.repository.CampaignStopRepository;
 import data.repository.interfaces.ICampaignRepository;
 import data.repository.interfaces.ICampaignStopRepository;
+
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -18,10 +20,22 @@ import java.util.Map;
 import java.util.Set;
 
 public class CampaignService implements ICampaignService {
-    private static final ICampaignRepository campaignRepository = new CampaignRepository();
-    private static final ICampaignStopRepository campaignStopRepository = new CampaignStopRepository();
-    private static final IUserService userService = new UserService();
-    private static final IProductService productService = new ProductService();
+//    private static final ICampaignRepository campaignRepository = new CampaignRepository();
+//    private static final ICampaignStopRepository campaignStopRepository = new CampaignStopRepository();
+//    private static final IUserService userService = new UserService();
+//    private static final IProductService productService = new ProductService();
+    private final ICampaignRepository campaignRepository;
+    private final ICampaignStopRepository campaignStopRepository;
+    private final IUserService userService;
+    private final IProductService productService;
+
+    @Inject
+    public CampaignService(ICampaignRepository campaignRepository, ICampaignStopRepository campaignStopRepository, IUserService userService, IProductService productService) {
+        this.campaignRepository = campaignRepository;
+        this.campaignStopRepository = campaignStopRepository;
+        this.userService = userService;
+        this.productService = productService;
+    }
 
     @Override
     public void startCampaign(String username, Map<String, Double> productNamesAndDiscountPercentages) {

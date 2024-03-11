@@ -5,16 +5,26 @@ import application.service.interfaces.IUserService;
 import data.model.entity.Role;
 import data.model.entity.enums.RoleName;
 import data.model.entity.User;
-import data.repository.UserRepository;
 import application.util.PasswordEncoder;
+import data.repository.interfaces.IUserRepository;
+
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 // TODO map dto-s to entities => MAPSTRUCT
 public class UserService implements IUserService {
-    private static final UserRepository userRepository = new UserRepository();
-    private static final IRoleService roleService = new RoleService();
+//    private static final UserRepository userRepository = new UserRepository();
+//    private static final IRoleService roleService = new RoleService();
+    private final IUserRepository userRepository;
+    private final IRoleService roleService;
+
+    @Inject
+    public UserService(IUserRepository userRepository, IRoleService roleService) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
+    }
 
     @Override
     public void create(String username, String password) {

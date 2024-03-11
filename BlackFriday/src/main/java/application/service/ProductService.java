@@ -6,14 +6,25 @@ import data.model.entity.Product;
 import data.model.entity.User;
 import data.repository.ProductRepository;
 import data.repository.interfaces.IProductRepository;
+
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class ProductService implements IProductService {
-    private static final IProductRepository productRepository = new ProductRepository();
-    private static final IUserService userService = new UserService();
+//    private static final IProductRepository productRepository = new ProductRepository();
+//    private static final IUserService userService = new UserService();
+
+    private final IProductRepository productRepository;
+    private final IUserService userService;
+
+    @Inject
+    public ProductService(IProductRepository productRepository, IUserService userService) {
+        this.productRepository = productRepository;
+        this.userService = userService;
+    }
 
     @Override
     public void create(String name, String description,
