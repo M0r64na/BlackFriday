@@ -8,6 +8,7 @@ import data.model.entity.User;
 import application.util.PasswordEncoder;
 import data.repository.interfaces.IUserRepository;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +66,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @PostConstruct
     public void initialize() {
         if(!userRepository.getAll().isEmpty()) return;
 

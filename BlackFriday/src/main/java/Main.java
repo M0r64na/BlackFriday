@@ -4,11 +4,8 @@ import common.HasRoleEmployeeInterceptor;
 import common.RolePrincipal;
 import common.UserLoginService;
 import common.config.UserLoginConfiguration;
-import common.module.UserLoginModule;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
-
-import javax.inject.Inject;
 import javax.security.auth.Subject;
 import javax.security.auth.login.Configuration;
 import java.util.HashMap;
@@ -31,15 +28,9 @@ public class Main {
 
         try(WeldContainer weldContainer = weld.initialize()) {
             IUserService userService = weldContainer.select(IUserService.class).get();
-            IRoleService roleService = weldContainer.select(IRoleService.class).get();
-            IStatusService statusService = weldContainer.select(IStatusService.class).get();
             IProductService productService = weldContainer.select(IProductService.class).get();
             IOrderService orderService = weldContainer.select(IOrderService.class).get();
             ICampaignService campaignService = weldContainer.select(ICampaignService.class).get();
-
-            roleService.initialize();
-            userService.initialize();
-            statusService.initialize();
 
             userService.create("kiki", "mojesh");
 
@@ -85,6 +76,5 @@ public class Main {
         catch (Exception ex) {
             System.out.printf("Requested operation cannot be executed. Reason: %s", ex.getMessage()).println();
         }
-        // TODO implement DI (dependency injection) to use @PostConstruct
     }
 }

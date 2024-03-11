@@ -5,6 +5,7 @@ import data.model.entity.Role;
 import data.model.entity.enums.RoleName;
 import data.repository.RoleRepository;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
@@ -23,6 +24,7 @@ public class RoleService implements IRoleService {
     }
 
     @Override
+    @PostConstruct
     public void initialize() {
         if(!roleRepository.getAll().isEmpty()) return;
 

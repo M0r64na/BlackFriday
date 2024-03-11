@@ -6,6 +6,7 @@ import data.model.entity.enums.OrderStatus;
 import data.repository.StatusRepository;
 import data.repository.interfaces.IStatusRepository;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ public class StatusService implements IStatusService {
     }
 
     @Override
+    @PostConstruct
     public void initialize() {
         if(!statusRepository.getAll().isEmpty()) return;
 
