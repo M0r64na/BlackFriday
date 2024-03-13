@@ -6,12 +6,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import java.io.Serializable;
 import java.util.UUID;
 
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class EntityBase {
+public abstract class EntityBase implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

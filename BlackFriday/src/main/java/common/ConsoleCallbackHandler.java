@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 
 public class ConsoleCallbackHandler implements CallbackHandler {
     private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
     @Override
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
          for(Callback c : callbacks) {
-            // nameCallback and passwordCallback are pattern variables
             if(c instanceof NameCallback nameCallback) {
                 this.handleNameCallback(nameCallback);
                 continue;

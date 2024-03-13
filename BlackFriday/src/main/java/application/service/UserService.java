@@ -10,14 +10,13 @@ import data.repository.interfaces.IUserRepository;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 // TODO map dto-s to entities => MAPSTRUCT
 public class UserService implements IUserService {
-//    private static final UserRepository userRepository = new UserRepository();
-//    private static final IRoleService roleService = new RoleService();
     private final IUserRepository userRepository;
     private final IRoleService roleService;
 
@@ -28,58 +27,58 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void create(String username, String password) {
+    public void createUser(String username, String password) throws RemoteException {
         String encodedPassword = PasswordEncoder.encodePassword(password);
-        Role clientRole = roleService.findByName(RoleName.CLIENT);
+        Role clientRole = this.roleService.findRoleByName(RoleName.CLIENT);
         User user = new User(username, encodedPassword);
         user.getRoles().add(clientRole);
 
-        userRepository.create(user);
+        this.userRepository.create(user);
     }
 
     @Override
-    public User update(String username, String password) {
-        User user = this.getByUsername(username);
+    public User updateUser(String username, String password) {
+        User user = this.getUserByUsername(username);
         this.updatePassword(user);
 
-        return userRepository.update(user);
+        return this.userRepository.update(user);
     }
 
     @Override
-    public Optional<User> getById(UUID id) {
-        return userRepository.getById(id);
+    public Optional<User> getUserById(UUID id) {
+        return this.userRepository.getById(id);
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.getAll();
+    public List<User> getAllUsers() {
+        return this.userRepository.getAll();
     }
 
     @Override
-    public void deleteById(UUID id) {
-        userRepository.deleteById(id);
+    public void deleteUserById(UUID id) {
+        this.userRepository.deleteById(id);
     }
 
     @Override
-    public User getByUsername(String username) {
-        return userRepository.getByUsername(username);
+    public User getUserByUsername(String username) {
+        return this.userRepository.getByUsername(username);
     }
 
     @Override
     @PostConstruct
-    public void initialize() {
-        if(!userRepository.getAll().isEmpty()) return;
+    public void initializeUsers() throws RemoteException {
+        if(!this.userRepository.getAll().isEmpty()) return;
 
-        this.create("employee", "employee");
+        this.createUser("employee", "employee");
 
-        User employee = this.getByUsername("employee");
-        employee.getRoles().add(roleService.findByName(RoleName.EMPLOYEE));
+        User employee = this.getUserByUsername("employee");
+        employee.getRoles().add(this.roleService.findRoleByName(RoleName.EMPLOYEE));
 
-        userRepository.update(employee);
+        this.userRepository.update(employee);
     }
 
     private void updatePassword(User user) {
-        String encodedPassword = this.getById(user.getId()).orElseThrow().getPassword();
+        String encodedPassword = this.getUserById(user.getId()).orElseThrow().getPassword();
 
         if(!encodedPassword.equals(user.getPassword())) {
             encodedPassword = PasswordEncoder.encodePassword(user.getPassword());

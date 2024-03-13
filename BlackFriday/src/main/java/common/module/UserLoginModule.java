@@ -3,12 +3,8 @@ package common.module;
 import application.service.interfaces.IUserService;
 import com.sun.security.auth.UserPrincipal;
 import common.RolePrincipal;
-import common.SecurityContext;
 import data.model.entity.User;
 import application.util.PasswordEncoder;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
 import javax.security.auth.login.LoginException;
@@ -16,7 +12,6 @@ import javax.security.auth.spi.LoginModule;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Map;
-import java.util.Set;
 
 public class UserLoginModule implements LoginModule {
     private static IUserService userService;
@@ -31,8 +26,7 @@ public class UserLoginModule implements LoginModule {
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
-        SecurityContext.setSubject(subject);
-        this.subject = SecurityContext.getSubject();
+        this.subject = subject;
         this.callbackHandler = callbackHandler;
     }
 
@@ -47,12 +41,11 @@ public class UserLoginModule implements LoginModule {
             String username = nameCallback.getName();
             String password = new String(passwordCallback.getPassword());
 
-            this.user = userService.getByUsername(username);
+            this.user = userService.getUserByUsername(username);
             if(PasswordEncoder.verifyPasswords(user.getPassword(), password)) this.isLoginSuccessful = true;
 
             passwordCallback.clearPassword();
         }
-        // Collapsed catch block
         catch (IOException | UnsupportedCallbackException ex) {
             throw new LoginException("Invalid username or password");
         }
@@ -82,11 +75,7 @@ public class UserLoginModule implements LoginModule {
     @Override
     public boolean logout() throws LoginException {
         boolean isLogoutSuccessful = true;
-        Set<Principal> principals = this.subject.getPrincipals();
-
-        principals.removeIf(principal -> principal instanceof UserPrincipal || principal instanceof RolePrincipal);
-
-        SecurityContext.removeSubject();
+        this.subject.getPrincipals().removeIf(principal -> principal instanceof UserPrincipal || principal instanceof RolePrincipal);
 
         return isLogoutSuccessful;
     }

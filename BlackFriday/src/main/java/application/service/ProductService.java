@@ -4,19 +4,15 @@ import application.service.interfaces.IProductService;
 import application.service.interfaces.IUserService;
 import data.model.entity.Product;
 import data.model.entity.User;
-import data.repository.ProductRepository;
 import data.repository.interfaces.IProductRepository;
-
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class ProductService implements IProductService {
-//    private static final IProductRepository productRepository = new ProductRepository();
-//    private static final IUserService userService = new UserService();
-
     private final IProductRepository productRepository;
     private final IUserService userService;
 
@@ -27,73 +23,72 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void create(String name, String description,
-                       int numberInStock, double minPrice, double currPrice,
-                       String usernameCreatedBy) {
-        Product product = new Product(name, description, numberInStock,
-                BigDecimal.valueOf(minPrice), BigDecimal.valueOf(currPrice));
+    public void createProduct(String name, String description,
+                              int numberInStock, BigDecimal minPrice, BigDecimal currPrice,
+                              String usernameCreatedBy) throws RemoteException {
+        Product product = new Product(name, description, numberInStock, minPrice, currPrice);
 
-        User createdAndLastModifiedBy = userService.getByUsername(usernameCreatedBy);
+        User createdAndLastModifiedBy = this.userService.getUserByUsername(usernameCreatedBy);
         product.setCreatedBy(createdAndLastModifiedBy);
         product.setLastModifiedBy(createdAndLastModifiedBy);
 
-        productRepository.create(product);
+        this.productRepository.create(product);
     }
 
     @Override
-    public Product update(String name, String description,
-                          int numberInStock, double minPrice, double currPrice,
-                          String usernameLastModifiedBy) {
+    public Product updateProduct(String name, String description,
+                                 int numberInStock, BigDecimal minPrice, BigDecimal currPrice,
+                                 String usernameLastModifiedBy) throws RemoteException {
         Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
         product.setName(name);
         product.setDescription(description);
         product.setNumberInStock(numberInStock);
-        product.setMinPrice(BigDecimal.valueOf(minPrice));
-        product.setCurrPrice(BigDecimal.valueOf(currPrice));
+        product.setMinPrice(minPrice);
+        product.setCurrPrice(currPrice);
 
-        return productRepository.update(product);
+        return this.productRepository.update(product);
     }
 
     @Override
-    public Optional<Product> getById(UUID id) {
-        return productRepository.getById(id);
+    public Optional<Product> getOrderById(UUID id) {
+        return this.productRepository.getById(id);
     }
 
     @Override
-    public List<Product> getAll() {
-        return productRepository.getAll();
+    public List<Product> getAllProducts() {
+        return this.productRepository.getAll();
     }
 
     @Override
-    public Product findByName(String name) {
-        return productRepository.findByName(name);
+    public Product findOrderByName(String name) {
+        return this.productRepository.findByName(name);
     }
 
     @Override
-    public void deleteById(UUID id) {
-        productRepository.deleteById(id);
+    public void deleteOrderById(UUID id) {
+        this.productRepository.deleteById(id);
     }
 
     @Override
-    public void updateMinPrice(String name, BigDecimal newMinPrice, String usernameLastModifiedBy) {
+    public void updateMinPriceOfProduct(String name, BigDecimal newMinPrice, String usernameLastModifiedBy) throws RemoteException {
         Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
         product.setMinPrice(newMinPrice);
 
-        productRepository.update(product);
+        this.productRepository.update(product);
     }
 
     @Override
-    public void updateCurrPrice(String name, BigDecimal newCurrPrice, String usernameLastModifiedBy) {
+    public void updateCurrPriceOfProduct(String name, BigDecimal newCurrPrice, String usernameLastModifiedBy) throws RemoteException {
         Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
         if(newCurrPrice.compareTo(product.getMinPrice()) < 0) throw new RuntimeException("Current price must be greater than or equal to minimum price");
 
         product.setCurrPrice(newCurrPrice);
 
-        productRepository.update(product);
+        this.productRepository.update(product);
     }
 
     @Override
-    public void reduceNumberInStock(String name, int quantity, String usernameLastModifiedBy) {
+    public void reduceNumberInStockOfProduct(String name, int quantity, String usernameLastModifiedBy) throws RemoteException {
         Product product = this.getProductAndSetLastModifiedBy(name, usernameLastModifiedBy);
 
         int newNumberInStock = product.getNumberInStock() - quantity;
@@ -101,13 +96,13 @@ public class ProductService implements IProductService {
 
         product.setNumberInStock(newNumberInStock);
 
-        productRepository.update(product);
+        this.productRepository.update(product);
     }
 
-    private Product getProductAndSetLastModifiedBy(String name, String usernameLastModifiedBy) {
-        Product product = productRepository.findByName(name);
+    private Product getProductAndSetLastModifiedBy(String name, String usernameLastModifiedBy) throws RemoteException {
+        Product product = this.productRepository.findByName(name);
 
-        User lastModifiedBy = userService.getByUsername(usernameLastModifiedBy);
+        User lastModifiedBy = this.userService.getUserByUsername(usernameLastModifiedBy);
         product.setLastModifiedBy(lastModifiedBy);
 
         return product;

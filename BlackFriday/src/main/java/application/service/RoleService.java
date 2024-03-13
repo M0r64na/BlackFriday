@@ -4,13 +4,10 @@ import application.service.interfaces.IRoleService;
 import data.model.entity.Role;
 import data.model.entity.enums.RoleName;
 import data.repository.RoleRepository;
-
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 public class RoleService implements IRoleService {
-//    private static final RoleRepository roleRepository = new RoleRepository();
     private final RoleRepository roleRepository;
 
     @Inject
@@ -19,16 +16,16 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public Role findByName(RoleName name) {
-        return roleRepository.findByName(name);
+    public Role findRoleByName(RoleName name) {
+        return this.roleRepository.findByName(name);
     }
 
     @Override
     @PostConstruct
-    public void initialize() {
-        if(!roleRepository.getAll().isEmpty()) return;
+    public void initializeRoles() {
+        if(!this.roleRepository.getAll().isEmpty()) return;
 
-        roleRepository.create(new Role(RoleName.CLIENT));
-        roleRepository.create(new Role(RoleName.EMPLOYEE));
+        this.roleRepository.create(new Role(RoleName.CLIENT));
+        this.roleRepository.create(new Role(RoleName.EMPLOYEE));
     }
 }
