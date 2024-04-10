@@ -1,0 +1,3 @@
+[submodule "BlackFriday.Server"]
+	path = BlackFriday.Server
+	url = https://github.com/M0r64na/BlackFriday.Server.git
