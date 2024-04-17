@@ -11,6 +11,7 @@
 
     <modules>
         <module>BlackFriday.Server</module>
+	    <module>BlackFriday.Client</module>
     </modules>
 
 </project>
